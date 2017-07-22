@@ -1,0 +1,7 @@
+language: csharp
+solution: "./NemSharp.sln"
+install:
+- travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./NemSharp.sln
+script:
+- xbuild ./NemSharp.sln
+- mono ./NemSharp/packages/xunit.runner.console*/tools/xunit.console.exe ./NemSharp/NemSharp.Tests/bin/Debug/NemSharp.Tests.dll
