@@ -18,6 +18,8 @@ namespace NemSharp.Request.Objects
         {
             RestRequest request = Builder.BuildRequest(GENERATE_PATH);
 
+            Console.WriteLine(Client.Execute<KeyPairViewModel>(request).Content);
+
             return Client.Execute<KeyPairViewModel>(request).Data;
         }
     }

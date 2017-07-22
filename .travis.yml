@@ -1,7 +1,18 @@
 language: csharp
-solution: "./NemSharp.sln"
+
+solution: ./NemSharp.sln
+
+services:
+  - docker
+  
+before_install:
+  - docker pull rb2nem/nis
+  - docker run -p 7890:7890 rb2nem/nis:latest
+  
+  
 install:
   - travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./NemSharp.sln
+  
 script:
   - xbuild ./NemSharp.sln
   - mono ./packages/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe ./NemSharp.Tests/bin/Debug/NemSharp.Tests.dll

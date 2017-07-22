@@ -1,10 +1,15 @@
-﻿namespace NemSharp.Request.Objects
+﻿using RestSharp.Deserializers;
+
+namespace NemSharp.Request.Objects
 {
     public class KeyPairViewModel
     {
-        public string PrivateKey;
-        public string PublicKey;
-        public string Address;
+        [DeserializeAs(Name = "privatekey")]
+        public string PrivateKey { get; set; }
+        [DeserializeAs(Name = "publickey")]
+        public string PublicKey { get; set; }
+        [DeserializeAs(Name = "address")]
+        public string Address { get; set; }
 
         public KeyPairViewModel() { }
 
