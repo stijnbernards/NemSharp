@@ -1,8 +1,8 @@
 language: csharp
-solution: NemSharp.sln
+solution: "./NemSharp.sln"
 install:
-  - nuget restore NemSharp.sln
+  - travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./NemSharp.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
-  - xbuild /p:Configuration=Release NemSharp.sln
-  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./NemSharp.Tests/bin/Release/NemSharp.Tests.dll
+  - xbuild ./NemSharp.sln
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./NemSharp/NemSharp.Tests/bin/Debug/NemSharp.Tests.dll
