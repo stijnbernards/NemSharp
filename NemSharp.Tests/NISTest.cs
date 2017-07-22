@@ -1,4 +1,5 @@
-﻿using NemSharp.Request.Objects;
+﻿using NemSharp.Models;
+using NemSharp.Request.Responses;
 using NUnit.Framework;
 
 namespace NemSharp.Tests

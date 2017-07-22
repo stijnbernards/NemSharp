@@ -1,4 +1,6 @@
-﻿using NemSharp.Request.Objects;
+﻿using System;
+using NemSharp.Models;
+using NemSharp.Request.Responses;
 using NUnit.Framework;
 
 namespace NemSharp.Tests
@@ -9,7 +11,9 @@ namespace NemSharp.Tests
         [Test]
         public void TestGenerate()
         {
-            KeyPairViewModel result = Client.Account.Generate();
+            KeyPairViewModel result = Client.Account.GenerateLocal(0x98);
+
+            Console.WriteLine(result.Address);
 
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.PrivateKey);

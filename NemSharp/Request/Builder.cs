@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RestSharp;
 
-namespace NemSharp.Request.Objects
+namespace NemSharp.Request
 {
     sealed class Builder
     {

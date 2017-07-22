@@ -9,7 +9,6 @@ before_install:
   - docker pull rb2nem/nis
   - docker run -d -p 7890:7890 rb2nem/nis:latest
   
-  
 install:
   - travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./NemSharp.sln
   

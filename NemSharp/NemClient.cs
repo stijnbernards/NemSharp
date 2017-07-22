@@ -1,5 +1,5 @@
 ﻿using System;
-using NemSharp.Request.Objects;
+using NemSharp.Models;
 using RestSharp;
 
 namespace NemSharp
