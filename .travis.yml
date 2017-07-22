@@ -4,4 +4,4 @@ install:
   - travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./NemSharp.sln
 script:
   - xbuild ./NemSharp.sln
-  - mono ./packages/NUnit.ConsoleRunner.3.7.0/tools/nunit-console.exe ./NemSharp.Tests/bin/Debug/NemSharp.Tests.dll
+  - mono ./packages/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe ./NemSharp.Tests/bin/Debug/NemSharp.Tests.dll
