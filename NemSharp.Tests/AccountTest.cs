@@ -1,12 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NemSharp.Request.Objects;
+﻿using NemSharp.Request.Objects;
+using NUnit.Framework;
 
 namespace NemSharp.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class AccountTest : TestBase
     {
-        [TestMethod]
+        [Test]
         public void TestGenerate()
         {
             KeyPairViewModel result = Client.Account.Generate();

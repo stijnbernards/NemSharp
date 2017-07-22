@@ -1,15 +1,15 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NemSharp.Request.Objects;
+﻿using NemSharp.Request.Objects;
+using NUnit.Framework;
 
 namespace NemSharp.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class NISTest : TestBase
     {
         const string NIS_OK = "ok";
         const string NIS_STATUS = "status";
 
-        [TestMethod]
+        [Test]
         public void TestHeartbeat()
         {
             NemRequestResult res = Client.NIS.HeartBeat();
@@ -22,7 +22,7 @@ namespace NemSharp.Tests
             StringAssert.Contains(res.Message, NIS_OK);
         }
 
-        [TestMethod]
+        [Test]
         public void TestStatus()
         {
             NemRequestResult res = Client.NIS.Status();
