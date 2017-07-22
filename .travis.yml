@@ -7,7 +7,7 @@ services:
   
 before_install:
   - docker pull rb2nem/nis
-  - docker run -p -d 7890:7890 rb2nem/nis:latest
+  - docker run -d -p 7890:7890 rb2nem/nis:latest
   
   
 install:
