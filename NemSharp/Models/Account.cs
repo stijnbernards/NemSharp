@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Security;
 using System.Security.Cryptography;
-using System.Text;
 using Albireo.Base32;
 using Chaos.NaCl;
 using NemSharp.Request;
@@ -13,23 +11,29 @@ namespace NemSharp.Models
 {
     public class Account : ModelBase
     {
-        const string GENERATE_PATH = "/account/generate";
+        private const string GENERATE_PATH = "/account/generate";
+        private const string GET_BY_ADDRESS_PATH = "/account/get";
 
-        public Account(RestClient client) : base(client)
+        #region Generation
+        public static KeyPairViewModel GenerateFromPrivateKey(string privateKey, int networkPrefix)
         {
-            
+            byte[] privateKeyBytes = CryptoBytes.FromHexString(privateKey);
+
+            return GenerateFromPrivateKey(privateKeyBytes, networkPrefix);
         }
 
-        public KeyPairViewModel GenerateFromNode()
+        public static KeyPairViewModel GenerateFromPrivateKey(byte[] privateKey, int networkPrefix)
         {
-            RestRequest request = Builder.BuildRequest(GENERATE_PATH);
+            Array.Reverse(privateKey);
+            byte[] publicKey = Ed25519.PublicKeyFromSeed(privateKey);
+            Array.Reverse(privateKey);
 
-            Console.WriteLine(Client.Execute<KeyPairViewModel>(request).Content);
+            string address = PublicKeyToAddress(publicKey, networkPrefix);
 
-            return Client.Execute<KeyPairViewModel>(request).Data;
+            return new KeyPairViewModel(CryptoBytes.ToHexStringLower(privateKey), CryptoBytes.ToHexStringLower(publicKey), address);
         }
 
-        public KeyPairViewModel GenerateLocal(byte networkPrefix)
+        public static KeyPairViewModel GenerateLocal(int networkPrefix)
         {
             byte[] privateKey = new byte[32];
 
@@ -38,23 +42,17 @@ namespace NemSharp.Models
                 rng.GetBytes(privateKey);
             }
 
-            Array.Reverse(privateKey);
-            byte[] publicKey = Ed25519.PublicKeyFromSeed(privateKey);
-            Array.Reverse(privateKey);
-
-            string address = PublicKeyToAddress(publicKey, networkPrefix);
-
-            return new KeyPairViewModel(Encoding.UTF8.GetString(privateKey), Encoding.UTF8.GetString(publicKey), address);
+            return GenerateFromPrivateKey(privateKey, networkPrefix);
         }
 
-        public string PublicKeyToAddress(byte[] publicKey, byte networkPrefix)
+        public static string PublicKeyToAddress(byte[] publicKey, int networkPrefix)
         {
             KeccakDigest shaDigest = new KeccakDigest(256);
             byte[] bytesFirst = new byte[32];
 
             shaDigest.BlockUpdate(publicKey, 0, 32);
             shaDigest.DoFinal(bytesFirst, 0);
-            
+
             RipeMD160Digest digestRipeMd160 = new RipeMD160Digest();
             byte[] bytesSecond = new byte[20];
 
@@ -62,11 +60,11 @@ namespace NemSharp.Models
             digestRipeMd160.DoFinal(bytesSecond, 0);
 
             byte[] bytesThird = CryptoBytes.FromHexString(
-                    string.Concat(networkPrefix == 0x68 ? 68 : 98, 
+                    string.Concat(networkPrefix,
                     CryptoBytes.ToHexStringLower(bytesSecond))
                 );
 
-            byte[] bytesFourth  = new byte[32];
+            byte[] bytesFourth = new byte[32];
 
             shaDigest.BlockUpdate(bytesThird, 0, 21);
             shaDigest.DoFinal(bytesFourth, 0);
@@ -79,6 +77,30 @@ namespace NemSharp.Models
             Array.Copy(bytesFifth, 0, bytesSixth, 21, 4);
 
             return Base32.Encode(bytesSixth).ToUpper();
+        }
+
+        #endregion
+
+        public Account(RestClient client) : base(client)
+        {
+            
+        }
+
+        public KeyPairViewModel GenerateFromNode()
+        {
+            RestRequest request = Builder.BuildRequest(GENERATE_PATH);
+
+            return Client.Execute<KeyPairViewModel>(request).Data;
+        }
+
+        public AccountMetaDataPair GetAccountByAddress(string address)
+        {
+            RestRequest request = Builder.BuildRequest(GET_BY_ADDRESS_PATH);
+            request.AddParameter("address", address, ParameterType.QueryString);
+
+            Console.WriteLine(Client.Execute<AccountMetaDataPair>(request).Content);
+
+            return Client.Execute<AccountMetaDataPair>(request).Data;
         }
     }
 }

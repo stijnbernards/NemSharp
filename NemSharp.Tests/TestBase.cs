@@ -10,7 +10,7 @@ namespace NemSharp.Tests
         [SetUp]
         public void Initialize()
         {
-            Client = new NemClient("http://bob.nem.ninja:7890");
+            Client = new NemClient("http://188.68.50.161:7890");
         }
     }
 }
