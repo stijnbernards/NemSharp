@@ -13,6 +13,9 @@ namespace NemSharp.Models
     {
         private const string GENERATE_PATH = "/account/generate";
         private const string GET_BY_ADDRESS_PATH = "/account/get";
+        private const string GET_BY_PUBLIC_KEY_PATH = "/account/get/from-public-key";
+        private const string GET_FORWARDED_BY_ADDRESS_PATH = "/account/get/forwarded";
+        private const string GET_FORWARDED_BY_PUBLIC_KEY = "/account/get/forwarded/from-public-key";
 
         #region Generation
         public static KeyPairViewModel GenerateFromPrivateKey(string privateKey, int networkPrefix)
@@ -95,10 +98,60 @@ namespace NemSharp.Models
 
         public AccountMetaDataPair GetAccountByAddress(string address)
         {
-            RestRequest request = Builder.BuildRequest(GET_BY_ADDRESS_PATH);
-            request.AddParameter("address", address, ParameterType.QueryString);
+            RestRequest request = Builder.BuildRequest(
+                    GET_BY_ADDRESS_PATH,
+                    new RequestParameter
+                    {
+                        Name = "address",
+                        Value = address,
+                        Type = ParameterType.QueryString
+                    }
+                );
 
-            Console.WriteLine(Client.Execute<AccountMetaDataPair>(request).Content);
+            return Client.Execute<AccountMetaDataPair>(request).Data;
+        }
+
+        public AccountMetaDataPair GetAccountByPublicKey(string publicKey)
+        {
+            RestRequest request = Builder.BuildRequest(
+                    GET_BY_PUBLIC_KEY_PATH,
+                    new RequestParameter
+                    {
+                        Name = "publicKey",
+                        Value = publicKey,
+                        Type = ParameterType.QueryString
+                    }
+                );
+
+            return Client.Execute<AccountMetaDataPair>(request).Data;
+        }
+
+        public AccountMetaDataPair GetForwardedAccountByAddress(string address)
+        {
+            RestRequest request = Builder.BuildRequest(
+                    GET_FORWARDED_BY_ADDRESS_PATH,
+                    new RequestParameter
+                    {
+                        Name = "address",
+                        Value = address,
+                        Type = ParameterType.QueryString
+                    }
+                );
+
+            return Client.Execute<AccountMetaDataPair>(request).Data;
+        }
+
+        public AccountMetaDataPair GetForwardedAccountByPublicKey(string publicKey)
+        {
+            RestRequest request = Builder.BuildRequest(
+                    GET_FORWARDED_BY_PUBLIC_KEY, 
+                    new RequestParameter
+                    {
+                        Name = "publicKey",
+                        Value = publicKey,
+                        Type = ParameterType.QueryString
+                    }
+                );
 
             return Client.Execute<AccountMetaDataPair>(request).Data;
         }

@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Networks.cs" />
+    <Compile Include="Request\RequestParameter.cs" />
     <Compile Include="Request\Responses\AccountMetaData.cs" />
     <Compile Include="Models\Wallet.cs" />
     <Compile Include="NemClient.cs" />
