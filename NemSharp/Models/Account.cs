@@ -23,6 +23,7 @@ namespace NemSharp.Models
         private const string ACCOUNT_TRANSFERS_INCOMING_PATH = "/account/transfers/incoming";
         private const string ACCOUNT_TRANSFERS_OUTGOING_PATH = "/account/transfers/outgoing";
         private const string ACCOUNT_TRANSFERS_ALL_PATH = "/account/transfers/all";
+        private const string ACCOUNT_IMPORTANCES_PATH = "/account/importances";
 
         #region Generation
         public static KeyPairViewModel GenerateFromPrivateKey(string privateKey, int networkPrefix)
@@ -221,6 +222,21 @@ namespace NemSharp.Models
                 );
 
             return Client.Execute<DataArray<TransactionMetaDataPair>>(request).Data;
+        }
+
+        public DataArray<AccountImportanceViewModel> GetImportances(string address)
+        {
+            RestRequest request = Builder.BuildRequest(
+                    ACCOUNT_IMPORTANCES_PATH,
+                    new RequestParameter
+                    {
+                        Name = "address",
+                        Value = address,
+                        Type = ParameterType.QueryString
+                    }
+                );
+
+            return Client.Execute<DataArray<AccountImportanceViewModel>>(request).Data;
         }
     }
 }

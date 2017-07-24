@@ -138,5 +138,19 @@ namespace NemSharp.Tests
             Assert.GreaterOrEqual(result.Data.First().Transaction.Amount, 1);
             Assert.GreaterOrEqual(result.Data.First().Meta.Height, 1);
         }
+
+        [Test]
+        public void TestGetAccountImportances()
+        {
+            DataArray<AccountImportanceViewModel> result = Client.Account.GetImportances(TestConstants.ACCOUNT_ADDRESS1);
+
+            foreach (AccountImportanceViewModel viewModel in result.Data)
+            {
+                if (viewModel.Importance.IsSet > 0)
+                {
+                    Assert.GreaterOrEqual(viewModel.Importance.Height, 1);
+                }
+            }
+        }
     }
 }
