@@ -74,19 +74,25 @@
   <ItemGroup>
     <Compile Include="Data\Networks.cs" />
     <Compile Include="Request\RequestParameter.cs" />
-    <Compile Include="Request\Responses\AccountMetaData.cs" />
+    <Compile Include="Request\Responses\Account\AccountMetaData.cs" />
     <Compile Include="Models\Wallet.cs" />
     <Compile Include="NemClient.cs" />
     <Compile Include="Models\NetworkData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Account.cs" />
-    <Compile Include="Request\Responses\AccountInfo.cs" />
-    <Compile Include="Request\Responses\AccountMetaDataPair.cs" />
+    <Compile Include="Request\Responses\Account\AccountInfo.cs" />
+    <Compile Include="Request\Responses\Account\AccountMetaDataPair.cs" />
+    <Compile Include="Request\Responses\DataArray.cs" />
     <Compile Include="Request\Responses\KeyPairViewModel.cs" />
     <Compile Include="Request\Builder.cs" />
     <Compile Include="Request\Responses\NemRequestResult.cs" />
     <Compile Include="Models\NIS.cs" />
     <Compile Include="Models\ModelBase.cs" />
+    <Compile Include="Request\Responses\Transaction\Transaction.cs" />
+    <Compile Include="Request\Responses\Transaction\TransactionHash.cs" />
+    <Compile Include="Request\Responses\Transaction\TransactionMessage.cs" />
+    <Compile Include="Request\Responses\Transaction\TransactionMetaData.cs" />
+    <Compile Include="Request\Responses\Transaction\TransactionMetaDataPair.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

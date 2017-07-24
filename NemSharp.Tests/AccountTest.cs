@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NemSharp.Data;
 using NemSharp.Models;
 using NemSharp.Request.Responses;
+using NemSharp.Request.Responses.Account;
+using NemSharp.Request.Responses.Transaction;
 using NUnit.Framework;
 
 namespace NemSharp.Tests
@@ -92,6 +96,47 @@ namespace NemSharp.Tests
             Assert.IsNotNull(result.MetaData);
 
             Assert.AreEqual(result.Account.Address, TestConstants.ACCOUNT_DELEGATED_ADDRESS1);
+        }
+
+        [Test]
+        public void TestGetAccountStatus()
+        {
+            AccountMetaData result = Client.Account.GetStatus(TestConstants.ACCOUNT_ADDRESS1);
+
+            Assert.IsNotNull(result.Status);
+        }
+
+        [Test]
+        public void TestGetAccountTransfersIncoming()
+        {
+            DataArray<TransactionMetaDataPair> result = Client.Account.GetTransfersIncoming(TestConstants.ACCOUNT_ADDRESS1);
+
+            Assert.GreaterOrEqual(result.Data.Count, 1);
+            Assert.GreaterOrEqual(result.Data.First().Transaction.Fee, 1);
+            Assert.GreaterOrEqual(result.Data.First().Transaction.Amount, 1);
+            Assert.GreaterOrEqual(result.Data.First().Meta.Height, 1);
+        }
+
+        [Test]
+        public void TestGetAccountTransfersOutgoing()
+        {
+            DataArray<TransactionMetaDataPair> result = Client.Account.GetTransfersOutgoing(TestConstants.ACCOUNT_ADDRESS1);
+
+            Assert.GreaterOrEqual(result.Data.Count, 1);
+            Assert.GreaterOrEqual(result.Data.First().Transaction.Fee, 1);
+            Assert.GreaterOrEqual(result.Data.First().Transaction.Amount, 1);
+            Assert.GreaterOrEqual(result.Data.First().Meta.Height, 1);
+        }
+
+        [Test]
+        public void TestGetAccountTransfersAll()
+        {
+            DataArray<TransactionMetaDataPair> result = Client.Account.GetTransfersAll(TestConstants.ACCOUNT_ADDRESS1);
+
+            Assert.GreaterOrEqual(result.Data.Count, 1);
+            Assert.GreaterOrEqual(result.Data.First().Transaction.Fee, 1);
+            Assert.GreaterOrEqual(result.Data.First().Transaction.Amount, 1);
+            Assert.GreaterOrEqual(result.Data.First().Meta.Height, 1);
         }
     }
 }

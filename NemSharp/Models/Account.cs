@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using Albireo.Base32;
 using Chaos.NaCl;
 using NemSharp.Request;
 using NemSharp.Request.Responses;
+using NemSharp.Request.Responses.Account;
+using NemSharp.Request.Responses.Transaction;
 using Org.BouncyCastle.Crypto.Digests;
 using RestSharp;
 
@@ -16,6 +19,10 @@ namespace NemSharp.Models
         private const string GET_BY_PUBLIC_KEY_PATH = "/account/get/from-public-key";
         private const string GET_FORWARDED_BY_ADDRESS_PATH = "/account/get/forwarded";
         private const string GET_FORWARDED_BY_PUBLIC_KEY = "/account/get/forwarded/from-public-key";
+        private const string ACCOUNT_STATUS_PATH = "/account/status";
+        private const string ACCOUNT_TRANSFERS_INCOMING_PATH = "/account/transfers/incoming";
+        private const string ACCOUNT_TRANSFERS_OUTGOING_PATH = "/account/transfers/outgoing";
+        private const string ACCOUNT_TRANSFERS_ALL_PATH = "/account/transfers/all";
 
         #region Generation
         public static KeyPairViewModel GenerateFromPrivateKey(string privateKey, int networkPrefix)
@@ -154,6 +161,66 @@ namespace NemSharp.Models
                 );
 
             return Client.Execute<AccountMetaDataPair>(request).Data;
+        }
+
+        public AccountMetaData GetStatus(string address)
+        {
+            RestRequest request = Builder.BuildRequest(
+                    ACCOUNT_STATUS_PATH,
+                    new RequestParameter
+                    {
+                        Name = "address",
+                        Value = address,
+                        Type = ParameterType.QueryString
+                    }
+                );
+
+            return Client.Execute<AccountMetaData>(request).Data;
+        }
+
+        public DataArray<TransactionMetaDataPair> GetTransfersIncoming(string address)
+        {
+            RestRequest request = Builder.BuildRequest(
+                    ACCOUNT_TRANSFERS_INCOMING_PATH,
+                    new RequestParameter
+                    {
+                        Name = "address",
+                        Value = address,
+                        Type = ParameterType.QueryString
+                    }
+                );
+
+            return Client.Execute<DataArray<TransactionMetaDataPair>>(request).Data;
+        }
+
+        public DataArray<TransactionMetaDataPair> GetTransfersOutgoing(string address)
+        {
+            RestRequest request = Builder.BuildRequest(
+                    ACCOUNT_TRANSFERS_OUTGOING_PATH,
+                    new RequestParameter
+                    {
+                        Name = "address",
+                        Value = address,
+                        Type = ParameterType.QueryString
+                    }
+                );
+
+            return Client.Execute<DataArray<TransactionMetaDataPair>>(request).Data;
+        }
+
+        public DataArray<TransactionMetaDataPair> GetTransfersAll(string address)
+        {
+            RestRequest request = Builder.BuildRequest(
+                    ACCOUNT_TRANSFERS_ALL_PATH,
+                    new RequestParameter
+                    {
+                        Name = "address",
+                        Value = address,
+                        Type = ParameterType.QueryString
+                    }
+                );
+
+            return Client.Execute<DataArray<TransactionMetaDataPair>>(request).Data;
         }
     }
 }

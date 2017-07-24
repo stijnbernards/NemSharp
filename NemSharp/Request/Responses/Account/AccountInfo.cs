@@ -1,6 +1,6 @@
 ﻿using RestSharp.Deserializers;
 
-namespace NemSharp.Request.Responses
+namespace NemSharp.Request.Responses.Account
 {
     public class AccountInfo
     {
