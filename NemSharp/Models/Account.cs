@@ -215,8 +215,6 @@ namespace NemSharp.Models
                     }
                 );
 
-            Console.WriteLine(Client.Execute<DataArray<TransactionMetaDataPair>>(request).Content);
-
             return Client.Execute<DataArray<TransactionMetaDataPair>>(request).Data;
         }
 
@@ -235,7 +233,7 @@ namespace NemSharp.Models
         }
 
         /// <summary>
-        /// TODO: Fix
+        /// TODO: Fix using request parameters breaks the API since the name has to be specified by the user which isn't what we want.
         /// </summary>
         /// <param name="address"></param>
         /// <param name="optionalParameters"></param>
