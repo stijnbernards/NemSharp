@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using NemSharp.Data;
 using NemSharp.Models;
+using NemSharp.Request;
 using NemSharp.Request.Responses;
 using NemSharp.Request.Responses.Account;
+using NemSharp.Request.Responses.Namespace;
 using NemSharp.Request.Responses.Transaction;
 using NUnit.Framework;
 
@@ -111,10 +113,10 @@ namespace NemSharp.Tests
         {
             DataArray<TransactionMetaDataPair> result = Client.Account.GetTransfersIncoming(TestConstants.ACCOUNT_ADDRESS1);
 
-            Assert.GreaterOrEqual(result.Data.Count, 1);
-            Assert.GreaterOrEqual(result.Data.First().Transaction.Fee, 1);
-            Assert.GreaterOrEqual(result.Data.First().Transaction.Amount, 1);
-            Assert.GreaterOrEqual(result.Data.First().Meta.Height, 1);
+            Assert.Greater(result.Data.Count, 0);
+            Assert.GreaterOrEqual(result.Data.First().Transaction.Fee, 0);
+            Assert.GreaterOrEqual(result.Data.First().Transaction.Amount, 0);
+            Assert.Greater(result.Data.First().Meta.Height, 0);
         }
 
         [Test]
@@ -122,10 +124,10 @@ namespace NemSharp.Tests
         {
             DataArray<TransactionMetaDataPair> result = Client.Account.GetTransfersOutgoing(TestConstants.ACCOUNT_ADDRESS1);
 
-            Assert.GreaterOrEqual(result.Data.Count, 1);
-            Assert.GreaterOrEqual(result.Data.First().Transaction.Fee, 1);
-            Assert.GreaterOrEqual(result.Data.First().Transaction.Amount, 1);
-            Assert.GreaterOrEqual(result.Data.First().Meta.Height, 1);
+            Assert.Greater(result.Data.Count, 0);
+            Assert.GreaterOrEqual(result.Data.First().Transaction.Fee, 0);
+            Assert.GreaterOrEqual(result.Data.First().Transaction.Amount, 0);
+            Assert.Greater(result.Data.First().Meta.Height, 0);
         }
 
         [Test]
@@ -133,10 +135,10 @@ namespace NemSharp.Tests
         {
             DataArray<TransactionMetaDataPair> result = Client.Account.GetTransfersAll(TestConstants.ACCOUNT_ADDRESS1);
 
-            Assert.GreaterOrEqual(result.Data.Count, 1);
-            Assert.GreaterOrEqual(result.Data.First().Transaction.Fee, 1);
-            Assert.GreaterOrEqual(result.Data.First().Transaction.Amount, 1);
-            Assert.GreaterOrEqual(result.Data.First().Meta.Height, 1);
+            Assert.Greater(result.Data.Count, 0);
+            Assert.GreaterOrEqual(result.Data.First().Transaction.Fee, 0);
+            Assert.GreaterOrEqual(result.Data.First().Transaction.Amount, 0);
+            Assert.Greater(result.Data.First().Meta.Height, 0);
         }
 
         [Test]
@@ -152,5 +154,53 @@ namespace NemSharp.Tests
                 }
             }
         }
+
+        [Test]
+        public void TestGetAccountNamespaces()
+        {
+            DataArray<Namespace> result = Client.Account.GetNamespaces(TestConstants.ACCOUNT_ADDRESS1);
+
+            CollectionAssert.Contains(
+                    result.Data,
+                    new Namespace
+                    {
+                        NamespaceID = "nemsharp.test",
+                        Height = 1045839,
+                        Owner = TestConstants.ACCOUNT_ADDRESS1
+                    }
+                );
+
+            CollectionAssert.Contains(
+                    result.Data,
+                    new Namespace
+                    {
+                        NamespaceID = "nemsharp",
+                        Height = 1045839,
+                        Owner = TestConstants.ACCOUNT_ADDRESS1
+                    }
+                );
+        }
+
+        [Test]
+        public void TestGetAccountParentNamespaces()
+        {
+            DataArray<Namespace> result = Client.Account.GetNamespaces(TestConstants.ACCOUNT_ADDRESS1,
+                new RequestParameter
+                {
+                    Name = "parent",
+                    Value = "nemsharp"
+                });
+
+            CollectionAssert.Contains(
+                result.Data,
+                new Namespace
+                {
+                    NamespaceID = "nemsharp.test",
+                    Height = 1045839,
+                    Owner = TestConstants.ACCOUNT_ADDRESS1
+                }
+            );
+        }
+
     }
 }

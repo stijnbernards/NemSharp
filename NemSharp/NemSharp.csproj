@@ -87,6 +87,9 @@
     <Compile Include="Request\Responses\DataArray.cs" />
     <Compile Include="Request\Responses\KeyPairViewModel.cs" />
     <Compile Include="Request\Builder.cs" />
+    <Compile Include="Request\Responses\Namespace\Namespace.cs" />
+    <Compile Include="Request\Responses\Namespace\NamespaceMetaData.cs" />
+    <Compile Include="Request\Responses\Namespace\NamespaceMetaDataPair.cs" />
     <Compile Include="Request\Responses\NemRequestResult.cs" />
     <Compile Include="Models\NIS.cs" />
     <Compile Include="Models\ModelBase.cs" />

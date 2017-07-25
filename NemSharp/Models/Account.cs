@@ -6,6 +6,7 @@ using Chaos.NaCl;
 using NemSharp.Request;
 using NemSharp.Request.Responses;
 using NemSharp.Request.Responses.Account;
+using NemSharp.Request.Responses.Namespace;
 using NemSharp.Request.Responses.Transaction;
 using Org.BouncyCastle.Crypto.Digests;
 using RestSharp;
@@ -24,6 +25,7 @@ namespace NemSharp.Models
         private const string ACCOUNT_TRANSFERS_OUTGOING_PATH = "/account/transfers/outgoing";
         private const string ACCOUNT_TRANSFERS_ALL_PATH = "/account/transfers/all";
         private const string ACCOUNT_IMPORTANCES_PATH = "/account/importances";
+        private const string ACCOUNT_NAMESPACE_PAGE_PATH = "/account/namespace/page";
 
         #region Generation
         public static KeyPairViewModel GenerateFromPrivateKey(string privateKey, int networkPrefix)
@@ -111,8 +113,7 @@ namespace NemSharp.Models
                     new RequestParameter
                     {
                         Name = "address",
-                        Value = address,
-                        Type = ParameterType.QueryString
+                        Value = address
                     }
                 );
 
@@ -126,8 +127,7 @@ namespace NemSharp.Models
                     new RequestParameter
                     {
                         Name = "publicKey",
-                        Value = publicKey,
-                        Type = ParameterType.QueryString
+                        Value = publicKey
                     }
                 );
 
@@ -141,8 +141,7 @@ namespace NemSharp.Models
                     new RequestParameter
                     {
                         Name = "address",
-                        Value = address,
-                        Type = ParameterType.QueryString
+                        Value = address
                     }
                 );
 
@@ -156,8 +155,7 @@ namespace NemSharp.Models
                     new RequestParameter
                     {
                         Name = "publicKey",
-                        Value = publicKey,
-                        Type = ParameterType.QueryString
+                        Value = publicKey
                     }
                 );
 
@@ -171,8 +169,7 @@ namespace NemSharp.Models
                     new RequestParameter
                     {
                         Name = "address",
-                        Value = address,
-                        Type = ParameterType.QueryString
+                        Value = address
                     }
                 );
 
@@ -186,8 +183,7 @@ namespace NemSharp.Models
                     new RequestParameter
                     {
                         Name = "address",
-                        Value = address,
-                        Type = ParameterType.QueryString
+                        Value = address
                     }
                 );
 
@@ -201,8 +197,7 @@ namespace NemSharp.Models
                     new RequestParameter
                     {
                         Name = "address",
-                        Value = address,
-                        Type = ParameterType.QueryString
+                        Value = address
                     }
                 );
 
@@ -216,10 +211,11 @@ namespace NemSharp.Models
                     new RequestParameter
                     {
                         Name = "address",
-                        Value = address,
-                        Type = ParameterType.QueryString
+                        Value = address
                     }
                 );
+
+            Console.WriteLine(Client.Execute<DataArray<TransactionMetaDataPair>>(request).Content);
 
             return Client.Execute<DataArray<TransactionMetaDataPair>>(request).Data;
         }
@@ -231,12 +227,37 @@ namespace NemSharp.Models
                     new RequestParameter
                     {
                         Name = "address",
-                        Value = address,
-                        Type = ParameterType.QueryString
+                        Value = address
                     }
                 );
 
             return Client.Execute<DataArray<AccountImportanceViewModel>>(request).Data;
+        }
+
+        /// <summary>
+        /// TODO: Fix
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="optionalParameters"></param>
+        /// <returns></returns>
+        public DataArray<Namespace> GetNamespaces(string address, params RequestParameter[] optionalParameters)
+        {
+            RequestParameter[] parameters = new RequestParameter[optionalParameters.Length + 1];
+
+            parameters[0] = new RequestParameter
+            {
+                Name = "address",
+                Value = address
+            };
+
+            optionalParameters.CopyTo(parameters, 1);
+
+            RestRequest request = Builder.BuildRequest(
+                    ACCOUNT_NAMESPACE_PAGE_PATH,
+                    parameters
+                );
+
+            return Client.Execute<DataArray<Namespace>>(request).Data;
         }
     }
 }
